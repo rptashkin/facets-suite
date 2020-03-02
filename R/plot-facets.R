@@ -65,8 +65,8 @@ cnlr_plot = function(facets_data,
     
     ymin = floor(min(segs$cnlr.median, na.rm = T))
     ymax = ceiling(max(segs$cnlr.median, na.rm = T))
-    if (ymin > -3) ymin = -3
-    if (ymax < 3) ymax = 3
+    if (ymin > -2) ymin = -2
+    if (ymax < 2) ymax = 2
     
     if (adjust_dipLogR) {
         snps$cnlr = snps$cnlr - dipLogR
@@ -240,9 +240,11 @@ cf_plot = function(facets_data,
     
     starts = cumsum(c(1, segs$num.mark))[seq_along(segs$num.mark)]
     ends = cumsum(c(segs$num.mark))
+    my_starts = snps[starts, 'chr_maploc']
+    my_ends = snps[ends, 'chr_maploc']
     
     cf = ggplot(segs) +
-        geom_rect(aes(xmin = starts, xmax = ends, ymax = 1, ymin = 0),
+        geom_rect(aes(xmin = my_starts, xmax = my_ends, ymax = 1, ymin = 0),
                   fill = cols, col = 'white', size = 0) +
         scale_x_continuous(breaks = mid, labels = names(mid), expand = c(.01, 0)) +
         scale_y_continuous(expand = c(0, 0)) +
@@ -315,7 +317,7 @@ icn_plot = function(facets_data,
         geom_segment(col = 'red', size = 1, 
                      aes(x = my_lcn_starts$chr_maploc, xend = my_lcn_ends$chr_maploc, 
                          y = my_lcn_starts$lcn, yend = my_lcn_ends$lcn)) +
-        geom_segment(col = 'black', size = 1, 
+        geom_segment(col = 'black', size = 0.8, 
                      aes(x = my_tcn_starts$chr_maploc, xend = my_tcn_ends$chr_maploc, 
                          y = my_tcn_starts$tcn, yend = my_tcn_ends$tcn)) +
         # scale_y_continuous(breaks=c(0:5, 5 + seq_len(35) / 3), labels = 0:40, limits = c(0, NA)) +
