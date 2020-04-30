@@ -35,7 +35,7 @@ parser$add_argument('-c', '--cval', required = FALSE, type = 'integer',
 parser$add_argument('-pc', '--purity-cval', required = FALSE, type = 'integer',
                     default = 150, help = 'If two pass, purity segmentation parameter (cval)')
 parser$add_argument('-m', '--min-nhet', required = FALSE, type = 'integer',
-                    default = 15, help = 'Min. number of heterozygous SNPs required for clustering [default %(default)s]')
+                    default = 10, help = 'Min. number of heterozygous SNPs required for clustering [default %(default)s]')
 parser$add_argument('-pm', '--purity-min-nhet', required = FALSE, type = 'integer',
                     default = 10, help = 'If two pass, purity min. number of heterozygous SNPs (cval) [default %(default)s]')
 parser$add_argument('-n', '--snp-window-size', required = FALSE, type = 'integer', 
@@ -48,6 +48,8 @@ parser$add_argument('-S', '--seed', required = FALSE, type = 'integer',
                     default = 100, help = 'Manual seed value [default %(default)s]')
 parser$add_argument('-l', '--legacy-output', required = FALSE, action="store_true",
                     default = FALSE, help = 'create legacy output files (.RData and .cncf.txt)')
+parser$add_argument('-rx', '--refX', required = FALSE, action="store_true",
+                    default = FALSE, help = 'use sex matched reference normal for chrX normalization')
 parser$add_argument('-fl', '--facets-lib-path', required = FALSE,
                     default = '', help = 'path to the facets library. must supply either --facets-lib-path or --facets2n-lib-path')
 parser$add_argument('-f2l', '--facets2n-lib-path', required = FALSE,
@@ -125,16 +127,16 @@ print_plots = function(outfile,
                         ' | ploidy=', round(facets_output$ploidy, 2),
                         ' | dipLogR=', round(facets_output$dipLogR, 2))
     
-    png(file = outfile, width = 850, height = 999, units = 'px', type = 'cairo-png', res = 96)
+    png(file = outfile, width = 6.5, height = 8, units = 'in', type = 'cairo-png', res = 300)
     suppressWarnings(
         egg::ggarrange(
             plots = list(
-                cnlr_plot(facets_output),
-                valor_plot(facets_output),
-                icn_plot(facets_output, method = 'em'),
-                cf_plot(facets_output, method = 'em'),
-                icn_plot(facets_output, method = 'cncf'),
-                cf_plot(facets_output, method = 'cncf')
+                cnlr_plot(facets_output,plotX = TRUE),
+                valor_plot(facets_output, plotX=TRUE),
+                icn_plot(facets_output, method = 'em',plotX = TRUE),
+                cf_plot(facets_output, method = 'em', plotX = TRUE),
+                icn_plot(facets_output, method = 'cncf', plotX = TRUE),
+                cf_plot(facets_output, method = 'cncf', plotX = TRUE)
             ),
             ncol = 1,
             nrow = 6,
@@ -215,7 +217,7 @@ if (dir.exists(directory)) {
 # Read SNP counts file
 message(paste('Reading', args$counts_file))
 if(args$facets2n_lib_path != ''){
-    read_counts = read_snp_matrix_facets2n(args$counts_file,MandUnormal= args$MandUnormal, ReferencePileupFile=args$reference_snp_pileup, ReferenceLoessFile=args$reference_loess_file, useMatchedX=args$useMatchedX)
+    read_counts = read_snp_matrix_facets2n(args$counts_file,MandUnormal= args$MandUnormal, ReferencePileupFile=args$reference_snp_pileup, ReferenceLoessFile=args$reference_loess_file, useMatchedX=args$useMatchedX, refX=args$refX)
 }else{
     read_counts = read_snp_matrix(args$counts_file)
 }
