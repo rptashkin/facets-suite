@@ -260,6 +260,9 @@ if(args$facets2n_lib_path != ''){
         message(paste('Reading donor counts matrix', args$donor_counts_file))
         donor_counts = read_snp_matrix_facets2n(args$donor_counts_file, donorCounts=TRUE)
     }
+    else{
+       donor_counts = NULL
+    }   
 }else{
     read_counts = read_snp_matrix(args$counts_file)
 }
