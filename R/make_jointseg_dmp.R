@@ -18,4 +18,7 @@ infile = paste(id,"hisens.Rdata", sep="_")
 infile = paste(wd,infile, sep="/")
 
 load(infile)
+out$jointseg = out$jointseg[,c("chrom","maploc","rCountT","rCountN","vafT","vafN","het","keep",
+				"gcpct","gcbias","cnlr","valor","lorvar","seg","seg0","segclust")]
+
 write.table(out$jointseg,file=outfile,sep="\t",row.names=FALSE)
