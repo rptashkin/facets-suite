@@ -48,7 +48,7 @@ if (!is.null(args$snp_pileup_path)) {
     }
 }
 
-output_file = paste0(args$output_prefix, '.snp_pileup.gz')
+output_file = paste0(args$output_prefix, '.dat.gz')
 
 if (file.exists(output_file)) {
     stop(paste(output_file, 'already exists. Remove before running.'), call. = F)
