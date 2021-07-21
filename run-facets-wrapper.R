@@ -262,9 +262,6 @@ if(args$facets2n_lib_path != ''){
     }else{
         donor_counts = NULL
     }
-    else{
-       donor_counts = NULL
-    }   
 }else{
     read_counts = read_snp_matrix(args$counts_file)
 }
